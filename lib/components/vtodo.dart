@@ -1,5 +1,5 @@
-import 'package:icalendar/components/icalendar_component.dart';
-import 'package:icalendar/components/rrule.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/rrule.dart';
 // VTodo Class with attendees, recurrence, and priority
 class VTodo extends ICalendarComponent {
   String uid;

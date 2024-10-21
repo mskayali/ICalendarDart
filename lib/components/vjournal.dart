@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VJournal Class representing a journal entry in iCalendar
 class VJournal extends ICalendarComponent {
   String uid;

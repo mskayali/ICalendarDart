@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VAttachment Class representing an attachment in iCalendar
 class VAttachment extends ICalendarComponent {
   String? uri; // URI for the attachment

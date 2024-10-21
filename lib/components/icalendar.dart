@@ -1,14 +1,14 @@
-import 'package:icalendar/components/exdate.dart';
-import 'package:icalendar/components/headers.dart';
-import 'package:icalendar/components/icalendar_component.dart';
-import 'package:icalendar/components/valarm.dart';
-import 'package:icalendar/components/vattachment.dart';
-import 'package:icalendar/components/vevent.dart';
-import 'package:icalendar/components/vfreebusy.dart';
-import 'package:icalendar/components/vjournal.dart';
-import 'package:icalendar/components/vparticioant.dart';
-import 'package:icalendar/components/vtimezone.dart';
-import 'package:icalendar/components/vtodo.dart';
+import 'package:icalendar_plus/components/exdate.dart';
+import 'package:icalendar_plus/components/headers.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/valarm.dart';
+import 'package:icalendar_plus/components/vattachment.dart';
+import 'package:icalendar_plus/components/vevent.dart';
+import 'package:icalendar_plus/components/vfreebusy.dart';
+import 'package:icalendar_plus/components/vjournal.dart';
+import 'package:icalendar_plus/components/vparticioant.dart';
+import 'package:icalendar_plus/components/vtimezone.dart';
+import 'package:icalendar_plus/components/vtodo.dart';
 // Main ICalendar class
 class ICalendar {
   CalHeaders headers;

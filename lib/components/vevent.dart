@@ -1,5 +1,5 @@
-import 'package:icalendar/components/icalendar_component.dart';
-import 'package:icalendar/components/rrule.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/rrule.dart';
 // VEvent Class with attendees, recurrence, and attachments
 class VEvent extends ICalendarComponent {
   String uid;

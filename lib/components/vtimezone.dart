@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VTimezone Class representing a timezone component in iCalendar
 
 class VTimezone extends ICalendarComponent {

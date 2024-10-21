@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // EXDATE Class to represent exception dates in recurring components
 class ExDate extends ICalendarComponent {
   List<DateTime> exDates;

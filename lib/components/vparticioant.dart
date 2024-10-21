@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VParticipant Class to represent attendees, contacts, and organizers
 class VParticipant extends ICalendarComponent {
   String role; // e.g., "ATTENDEE", "ORGANIZER", "CONTACT"

@@ -1,4 +1,4 @@
-import 'package:icalendar/icalendar.dart';
+import 'package:icalendar_plus/icalendar.dart';
 
 void main() {
   // Create Calendar Headers
@@ -72,4 +72,6 @@ void main() {
   parsedCalendar.components.forEach((component) {
     print(component.toJson());
   });
+
+  
 }

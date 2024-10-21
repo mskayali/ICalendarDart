@@ -1,5 +1,5 @@
 
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VAlarm Class representing an alarm component in iCalendar
 class VAlarm extends ICalendarComponent {
   String action; // e.g., "DISPLAY", "EMAIL"

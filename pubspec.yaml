@@ -1,17 +1,9 @@
-name: icalendar
-description: "A new Flutter plugin project."
+name: icalendar_plus
+description: "This Dart plugin provides a comprehensive set of classes to create, manage, serialize, and parse iCalendar components. It supports creating events, to-dos, journals, alarms, free/busy times, timezones, and more. The plugin adheres to the iCalendar (`.ics`) format, making it easy to integrate with calendar applications."
 version: 0.0.1
 homepage: https://spinex.io
 
 environment:
   sdk: ^3.5.3
-  flutter: '>=3.3.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
-
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^4.0.0

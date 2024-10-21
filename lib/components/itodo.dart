@@ -1,5 +1,5 @@
-import 'package:icalendar/components/icalendar_component.dart';
-import 'package:icalendar/components/rrule.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/rrule.dart';
 // ITodo Class representing a to-do component in iCalendar
 class ITodo extends ICalendarComponent {
   String uid;

@@ -1,4 +1,4 @@
-import 'package:icalendar/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/icalendar_component.dart';
 // VFreeBusy Class representing a free/busy time component in iCalendar
 class VFreeBusy extends ICalendarComponent {
   String uid;
