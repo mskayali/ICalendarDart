@@ -20,7 +20,7 @@ void main() {
     summary: 'Team Meeting',
     description: 'Weekly sync-up meeting with the project team.',
     location: 'Zoom',
-    status: 'CONFIRMED',
+    status: EVENTStatus.confirmed,
     attendees: ['mailto:member1@example.com', 'mailto:member2@example.com'],
     organizer: 'mailto:manager@example.com',
   );
@@ -39,7 +39,7 @@ void main() {
     summary: 'Prepare Presentation',
     due: DateTime(2024, 11, 1, 12, 0),
     description: 'Create slides for the quarterly review.',
-    status: 'NEEDS-ACTION',
+    status: TODOStatus.needsAction,
     priority: '1',
   );
 
@@ -49,8 +49,8 @@ void main() {
     dtstamp: DateTime.now(),
     dtstart: DateTime(2024, 11, 1, 8, 0),
     dtend: DateTime(2024, 11, 1, 18, 0),
-    freeTimes: ['20241101T080000Z/20241101T090000Z'],
-    busyTimes: ['20241101T100000Z/20241101T110000Z'],
+    freeTimes: [DateRangeUtil.parse('20241101T080000Z/20241101T090000Z')],
+    busyTimes: [DateRangeUtil.parse('20241101T100000Z/20241101T110000Z')],
   );
 
   // Add components to the calendar
@@ -73,5 +73,5 @@ void main() {
     print(component.toJson());
   });
 
-  
+
 }

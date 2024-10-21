@@ -1,11 +1,12 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VJournal Class representing a journal entry in iCalendar
 class VJournal extends ICalendarComponent {
   String uid;
   DateTime dtstamp;
   String summary;
   String? description;
-  String? status;
+  JOURNALStatus? status;
   List<String>? attendees;
   String? organizer;
   String? contact;
@@ -29,7 +30,7 @@ class VJournal extends ICalendarComponent {
     buffer.write('DTSTAMP:${formatDateTime(dtstamp)}\n');
     buffer.write('SUMMARY:$summary\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
-    if (status != null) buffer.write('STATUS:$status\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null}\n');
     if (attendees != null) {
       for (var attendee in attendees!) {
         buffer.write('ATTENDEE:$attendee\n');
@@ -48,7 +49,7 @@ class VJournal extends ICalendarComponent {
       'DTSTAMP': formatDateTime(dtstamp),
       'SUMMARY': summary,
       'DESCRIPTION': description,
-      'STATUS': status,
+      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null ,
       'ATTENDEE': attendees,
       'ORGANIZER': organizer,
       'CONTACT': contact,
@@ -62,7 +63,7 @@ class VJournal extends ICalendarComponent {
     DateTime? dtstamp;
     String? summary;
     String? description;
-    String? status;
+    JOURNALStatus? status;
     List<String>? attendees;
     String? organizer;
     String? contact;
@@ -87,7 +88,7 @@ class VJournal extends ICalendarComponent {
           description = value;
           break;
         case 'STATUS':
-          status = value;
+          status = JOURNALStatus.values.firstWhere((e)=>Heplers.camelToSnake(e.name.replaceAll('_', '')).toUpperCase() == value);
           break;
         case 'ATTENDEE':
           attendees ??= [];

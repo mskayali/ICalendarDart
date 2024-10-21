@@ -1,12 +1,13 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VFreeBusy Class representing a free/busy time component in iCalendar
 class VFreeBusy extends ICalendarComponent {
   String uid;
   DateTime dtstamp;
   DateTime dtstart;
   DateTime dtend;
-  List<String>? freeTimes; // Free periods in "START/END" format
-  List<String>? busyTimes; // Busy periods in "START/END" format
+  List<DateRangeUtil>? freeTimes; // Free periods in "START/END" format
+  List<DateRangeUtil>? busyTimes; // Busy periods in "START/END" format
   String? organizer;
   String? contact;
 
@@ -66,8 +67,8 @@ class VFreeBusy extends ICalendarComponent {
     DateTime? dtstamp;
     DateTime? dtstart;
     DateTime? dtend;
-    List<String>? freeTimes;
-    List<String>? busyTimes;
+    List<DateRangeUtil>? freeTimes;
+    List<DateRangeUtil>? busyTimes;
     String? organizer;
     String? contact;
 
@@ -85,10 +86,10 @@ class VFreeBusy extends ICalendarComponent {
             final fbType = fbTypeParts[1];
             if (fbType == 'FREE') {
               freeTimes ??= [];
-              freeTimes.add(value);
+              freeTimes.add(DateRangeUtil.parse(value) );
             } else if (fbType == 'BUSY') {
               busyTimes ??= [];
-              busyTimes.add(value);
+              busyTimes.add(DateRangeUtil.parse(value));
             }
           }
         }

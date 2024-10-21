@@ -1,5 +1,5 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
-import 'package:icalendar_plus/components/rrule.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VEvent Class with attendees, recurrence, and attachments
 class VEvent extends ICalendarComponent {
   String uid;
@@ -9,7 +9,7 @@ class VEvent extends ICalendarComponent {
   String summary;
   String? description;
   String? location;
-  String? status;
+  EVENTStatus? status;
   RecurrenceRule? rrule;
   List<DateTime>? exDates;
   List<String>? attendees;
@@ -45,7 +45,7 @@ class VEvent extends ICalendarComponent {
     buffer.write('SUMMARY:$summary\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
     if (location != null) buffer.write('LOCATION:$location\n');
-    if (status != null) buffer.write('STATUS:$status\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null}\n');
     if (rrule != null) buffer.write('RRULE:${rrule!.serialize()}\n');
     if (exDates != null) {
       for (var date in exDates!) {
@@ -74,7 +74,7 @@ class VEvent extends ICalendarComponent {
       'SUMMARY': summary,
       'DESCRIPTION': description,
       'LOCATION': location,
-      'STATUS': status,
+      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null,
       'RRULE': rrule?.toJson(),
       'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
       'ATTENDEE': attendees,
@@ -93,7 +93,7 @@ class VEvent extends ICalendarComponent {
     String? summary;
     String? description;
     String? location;
-    String? status;
+    EVENTStatus? status;
     RecurrenceRule? rrule;
     List<DateTime>? exDates;
     List<String>? attendees;
@@ -130,7 +130,7 @@ class VEvent extends ICalendarComponent {
           location = value;
           break;
         case 'STATUS':
-          status = value;
+          status = EVENTStatus.values.firstWhere((e) => Heplers.camelToSnake(e.name).toUpperCase() == value);
           break;
         case 'RRULE':
           rrule = RecurrenceRule.parse(value);

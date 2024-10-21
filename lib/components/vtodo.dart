@@ -1,5 +1,5 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
-import 'package:icalendar_plus/components/rrule.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VTodo Class with attendees, recurrence, and priority
 class VTodo extends ICalendarComponent {
   String uid;
@@ -7,7 +7,7 @@ class VTodo extends ICalendarComponent {
   String summary;
   DateTime due;
   String? description;
-  String? status;
+  TODOStatus? status;
   String? priority;
   RecurrenceRule? rrule;
   List<DateTime>? exDates;
@@ -39,7 +39,7 @@ class VTodo extends ICalendarComponent {
     buffer.write('SUMMARY:$summary\n');
     buffer.write('DUE:${formatDateTime(due)}\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
-    if (status != null) buffer.write('STATUS:$status\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null}\n');
     if (priority != null) buffer.write('PRIORITY:$priority\n');
     if (rrule != null) buffer.write('RRULE:${rrule!.serialize()}\n');
     if (exDates != null) {
@@ -66,7 +66,7 @@ class VTodo extends ICalendarComponent {
       'SUMMARY': summary,
       'DUE': formatDateTime(due),
       'DESCRIPTION': description,
-      'STATUS': status,
+      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null,
       'PRIORITY': priority,
       'RRULE': rrule?.toJson(),
       'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
@@ -76,6 +76,9 @@ class VTodo extends ICalendarComponent {
     };
   }
 
+
+
+
   static VTodo parse(String vtodoString) {
     final lines = vtodoString.split('\n');
     String? uid;
@@ -83,7 +86,7 @@ class VTodo extends ICalendarComponent {
     DateTime? due;
     String? summary;
     String? description;
-    String? status;
+    TODOStatus? status;
     String? priority;
     RecurrenceRule? rrule;
     List<DateTime>? exDates;
@@ -114,7 +117,7 @@ class VTodo extends ICalendarComponent {
           description = value;
           break;
         case 'STATUS':
-          status = value;
+          status = TODOStatus.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == value) ;
           break;
         case 'PRIORITY':
           priority = value;
