@@ -11,8 +11,8 @@ class VTodo extends ICalendarComponent {
   String? priority;
   RecurrenceRule? rrule;
   List<DateTime>? exDates;
-  List<String>? attendees;
-  String? organizer;
+  List<Attendee>? attendees;
+  MailTo? organizer;
   String? contact;
 
   VTodo({
@@ -90,8 +90,8 @@ class VTodo extends ICalendarComponent {
     String? priority;
     RecurrenceRule? rrule;
     List<DateTime>? exDates;
-    List<String>? attendees;
-    String? organizer;
+    List<Attendee>? attendees;
+    MailTo? organizer;
     String? contact;
 
     for (var line in lines) {
@@ -131,10 +131,10 @@ class VTodo extends ICalendarComponent {
           break;
         case 'ATTENDEE':
           attendees ??= [];
-          attendees.add(value);
+          attendees.add(Attendee.parse(value));
           break;
         case 'ORGANIZER':
-          organizer = value;
+          organizer = MailTo(value);
           break;
         case 'CONTACT':
           contact = value;

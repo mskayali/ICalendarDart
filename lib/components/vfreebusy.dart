@@ -8,7 +8,7 @@ class VFreeBusy extends ICalendarComponent {
   DateTime dtend;
   List<DateRangeUtil>? freeTimes; // Free periods in "START/END" format
   List<DateRangeUtil>? busyTimes; // Busy periods in "START/END" format
-  String? organizer;
+  MailTo? organizer;
   String? contact;
 
   VFreeBusy({
@@ -69,7 +69,7 @@ class VFreeBusy extends ICalendarComponent {
     DateTime? dtend;
     List<DateRangeUtil>? freeTimes;
     List<DateRangeUtil>? busyTimes;
-    String? organizer;
+    MailTo? organizer;
     String? contact;
 
     for (var line in lines) {
@@ -110,7 +110,7 @@ class VFreeBusy extends ICalendarComponent {
           dtend = DateTime.parse(value.replaceAll('Z', ''));
           break;
         case 'ORGANIZER':
-          organizer = value;
+          organizer = MailTo(value);
           break;
         case 'CONTACT':
           contact = value;

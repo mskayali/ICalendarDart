@@ -1,9 +1,10 @@
 
 import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VAlarm Class representing an alarm component in iCalendar
 class VAlarm extends ICalendarComponent {
-  String action; // e.g., "DISPLAY", "EMAIL"
-  String trigger; // Time before or after an event when the alarm should go off
+  VAlarmAction action; // e.g., "DISPLAY", "EMAIL"
+  RelativeTime trigger; // Time before or after an event when the alarm should go off
   String? description; // Description of the alarm
   String? duration; // Duration for repeating alarms
   int? repeat; // Number of times the alarm should repeat
@@ -22,7 +23,7 @@ class VAlarm extends ICalendarComponent {
   String serialize() {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VALARM\n');
-    buffer.write('ACTION:$action\n');
+    buffer.write('ACTION:${Heplers.camelToSnake(action.name).toUpperCase()}\n');
     buffer.write('TRIGGER:$trigger\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
     if (duration != null) buffer.write('DURATION:$duration\n');
@@ -35,7 +36,7 @@ class VAlarm extends ICalendarComponent {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'ACTION': action,
+      'ACTION': Heplers.camelToSnake(action.name).toUpperCase(),
       'TRIGGER': trigger,
       'DESCRIPTION': description,
       'DURATION': duration,
@@ -47,8 +48,8 @@ class VAlarm extends ICalendarComponent {
   // Parsing VAlarm from .ics formatted string
   static VAlarm parse(String valarmString) {
     final lines = valarmString.split('\n');
-    String? action;
-    String? trigger;
+    VAlarmAction? action;
+    RelativeTime? trigger;
     String? description;
     String? duration;
     int? repeat;
@@ -62,10 +63,10 @@ class VAlarm extends ICalendarComponent {
 
       switch (key) {
         case 'ACTION':
-          action = value;
+          action = VAlarmAction.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == value);
           break;
         case 'TRIGGER':
-          trigger = value;
+          trigger = RelativeTime.parse(value);
           break;
         case 'DESCRIPTION':
           description = value;

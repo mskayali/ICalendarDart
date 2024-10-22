@@ -21,14 +21,14 @@ void main() {
     description: 'Weekly sync-up meeting with the project team.',
     location: 'Zoom',
     status: EVENTStatus.confirmed,
-    attendees: ['mailto:member1@example.com', 'mailto:member2@example.com'],
-    organizer: 'mailto:manager@example.com',
+    attendees: [Attendee(mailto:MailTo('member1@example.com')), Attendee(mailto:MailTo('member2@example.com'), cutype: Cutype.individual)],
+    organizer: MailTo.parse('mailto:manager@example.com'),
   );
 
   // Create a VAlarm for the event
   final alarm = VAlarm(
-    action: 'DISPLAY',
-    trigger: '-PT15M', // 15 minutes before the event
+    action: VAlarmAction.display,
+    trigger: RelativeTime.parse('-PT15M'), // 15 minutes before the event
     description: 'Reminder: Team Meeting in 15 minutes.',
   );
 

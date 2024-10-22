@@ -1,8 +1,9 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
+import 'package:icalendar_plus/components/utils.dart';
 // VParticipant Class to represent attendees, contacts, and organizers
 class VParticipant extends ICalendarComponent {
-  String role; // e.g., "ATTENDEE", "ORGANIZER", "CONTACT"
-  String email;
+  Role role; // e.g., "ATTENDEE", "ORGANIZER", "CONTACT"
+  MailTo email;
   String? name; // Optional name for the participant
 
   VParticipant({
@@ -15,9 +16,9 @@ class VParticipant extends ICalendarComponent {
   String serialize() {
     final buffer = StringBuffer();
     if (name != null) {
-      buffer.write('$role;CN=$name:mailto:$email\n');
+      buffer.write('$role;CN=$name:$email\n');
     } else {
-      buffer.write('$role:mailto:$email\n');
+      buffer.write('$role:$email\n');
     }
     return buffer.toString();
   }
@@ -33,22 +34,22 @@ class VParticipant extends ICalendarComponent {
 
   // Parsing VParticipant from .ics formatted string
   static VParticipant parse(String vparticipantString) {
-    String? role;
-    String? email;
+    late Role role;
+    late MailTo email;
     String? name;
 
     if (vparticipantString.contains('mailto')) {
       final parts = vparticipantString.split(':');
-      role = parts[0].split(';')[0];
-      email = parts[1];
+      role = Role.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == parts[0].split(';')[0]);
+      email = MailTo.parse(parts[1]) ;
       if (parts[0].contains('CN=')) {
         name = parts[0].split('CN=')[1];
       }
     }
 
     return VParticipant(
-      role: role ?? '',
-      email: email ?? '',
+      role: role,
+      email: email ,
       name: name,
     );
   }

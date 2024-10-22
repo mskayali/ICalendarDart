@@ -12,8 +12,8 @@ class VEvent extends ICalendarComponent {
   EVENTStatus? status;
   RecurrenceRule? rrule;
   List<DateTime>? exDates;
-  List<String>? attendees;
-  String? organizer;
+  List<Attendee>? attendees;
+  MailTo? organizer;
   String? contact;
   String? attachment;
 
@@ -85,7 +85,9 @@ class VEvent extends ICalendarComponent {
   }
 
   static VEvent parse(String veventString) {
+   
     final lines = veventString.split('\n');
+    
     String? uid;
     DateTime? dtstamp;
     DateTime? dtstart;
@@ -96,8 +98,8 @@ class VEvent extends ICalendarComponent {
     EVENTStatus? status;
     RecurrenceRule? rrule;
     List<DateTime>? exDates;
-    List<String>? attendees;
-    String? organizer;
+    List<Attendee>? attendees;
+    MailTo? organizer;
     String? contact;
     String? attachment;
 
@@ -105,7 +107,7 @@ class VEvent extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value = parts.getRange(1, parts.length).join(':');
 
       switch (key) {
         case 'UID':
@@ -141,10 +143,10 @@ class VEvent extends ICalendarComponent {
           break;
         case 'ATTENDEE':
           attendees ??= [];
-          attendees.add(value);
+          attendees.add(Attendee.parse(value) );
           break;
         case 'ORGANIZER':
-          organizer = value;
+          organizer = MailTo.parse(value);
           break;
         case 'CONTACT':
           contact = value;
