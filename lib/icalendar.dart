@@ -1,5 +1,4 @@
 library ICalendar;
-export 'package:icalendar_plus/components/exdate.dart';
 export 'package:icalendar_plus/components/headers.dart';
 export 'package:icalendar_plus/components/icalendar.dart';
 export 'package:icalendar_plus/components/icalendar_component.dart';

@@ -9,7 +9,7 @@ class DateRangeUtil{
   });
   @override
   String toString() {
-    return '${Heplers.formatDateTime(start)}$seperator${Heplers.formatDateTime(end)}';
+    return '${Helpers.formatDateTime(start)}$seperator${Helpers.formatDateTime(end)}';
   }
 
   static DateRangeUtil parse(String daterangeutilString,[String seperator='/']) {
@@ -25,7 +25,7 @@ class DateRangeUtil{
   }
 }
 
-class Heplers{
+class Helpers{
 
   static String durationToOffsetString(Duration duration) {
     int hours = duration.inHours.abs();
@@ -237,7 +237,7 @@ abstract class Trriger {
     final datetime = DateTime.tryParse(timeString);
     if (datetime == null) {
       try {
-        return TrrigerDuration(Heplers.triggerToDuration(timeString));
+        return TrrigerDuration(Helpers.triggerToDuration(timeString));
       } catch (e) {
         throw 'Invalid format for RelativeTime string: $timeString';
       }
@@ -256,7 +256,7 @@ class TrrigerDate extends Trriger{
   );
   @override
   String toString() {
-    return Heplers.formatDateTime(datetime);
+    return Helpers.formatDateTime(datetime);
   }
   static TrrigerDate parse(String timeString) {
     final datetime=DateTime.tryParse(timeString);
@@ -274,11 +274,11 @@ class TrrigerDuration extends Trriger{
   );
   @override
   String toString() {
-    return Heplers.durationToTrigger(duration);
+    return Helpers.durationToTrigger(duration);
   }
   static TrrigerDuration parse(String timeString) {
     try {
-      return TrrigerDuration(Heplers.triggerToDuration(timeString));
+      return TrrigerDuration(Helpers.triggerToDuration(timeString));
     } catch (e) {
       throw 'Invalid format for RelativeTime string: $timeString';
     }
@@ -287,15 +287,15 @@ class TrrigerDuration extends Trriger{
 class MailTo{
   String mailto;
   MailTo(this.mailto){
-    if (!Heplers.isValidEmail(mailto)) {
+    if (!Helpers.isValidEmail(mailto)) {
       throw 'Invalid MailTo email format';
     }
   }
   static MailTo parse(String mailtoString){
     final line=mailtoString.split(':');
-    if(line.length==2 && line[0]=='mailto' && Heplers.isValidEmail(line[1].trim().replaceAll(',', ''))){
+    if(line.length==2 && line[0]=='mailto' && Helpers.isValidEmail(line[1].trim().replaceAll(',', ''))){
       return MailTo(line[1].trim().replaceAll(',', ''));
-    }else if(Heplers.isValidEmail(line[0].trim().replaceAll(',', ''))){
+    }else if(Helpers.isValidEmail(line[0].trim().replaceAll(',', ''))){
         return MailTo(line[0].trim().replaceAll(',', ''));
     }
     throw 'Invalid MailTo format';
@@ -332,13 +332,13 @@ class Attendee{
     if(partstat != null){attributeCount++;}
     if(cutype != null){attributeCount++;}
     if(delegatedTo != null){
-      if (!Heplers.isValidEmail(delegatedTo!)) {
+      if (!Helpers.isValidEmail(delegatedTo!)) {
         throw 'Invalid Attendee email format for mailTo';
       }
       attributeCount++;
     }
     if(delegatedFrom != null){
-      if (!Heplers.isValidEmail(delegatedFrom!)) {
+      if (!Helpers.isValidEmail(delegatedFrom!)) {
         throw 'Invalid Attendee email format for mailTo';
       }
       attributeCount++;
@@ -351,10 +351,10 @@ class Attendee{
     return{
       'MAILTO':mailto.mailto,
       'CN': cn,
-      'ROLE': role?.name != null ? Heplers.camelToSnake(role!.name).toUpperCase() : null,
+      'ROLE': role?.name != null ? Helpers.camelToSnake(role!.name).toUpperCase() : null,
       'RSVP': rsvp?.toString(),
-      'PARTSTAT': partstat?.name != null ? Heplers.camelToSnake(partstat!.name).toUpperCase() : null,
-      'CUTYPE': cutype?.name != null ? Heplers.camelToSnake(cutype!.name).toUpperCase() : null,
+      'PARTSTAT': partstat?.name != null ? Helpers.camelToSnake(partstat!.name).toUpperCase() : null,
+      'CUTYPE': cutype?.name != null ? Helpers.camelToSnake(cutype!.name).toUpperCase() : null,
       'DELEGATED-TO': delegatedTo,
       'DELEGATED-FROM': delegatedFrom,
     };
@@ -374,10 +374,10 @@ class Attendee{
       return Attendee(
         mailto: MailTo.parse(attendeeJson['mailto']),
         cn: attendeeJson['CN'],
-        role: attendeeJson['ROLE'] != null ? Role.values.firstWhere((e)=>e.name == Heplers.toCamelCase(attendeeJson['ROLE'])) : null,
+        role: attendeeJson['ROLE'] != null ? Role.values.firstWhere((e)=>e.name == Helpers.toCamelCase(attendeeJson['ROLE'])) : null,
         rsvp: attendeeJson['RSVP'] != null ? attendeeJson['RSVP'] == 'TRUE' : null,
-        partstat: attendeeJson['PARTSTAT'] != null ? Partstat.values.firstWhere((e)=>e.name == Heplers.toCamelCase(attendeeJson['PARTSTAT'])) : null,
-        cutype: attendeeJson['CUTYPE'] != null ? Cutype.values.firstWhere((e) => e.name == Heplers.toCamelCase(attendeeJson['CUTYPE'])) : null,
+        partstat: attendeeJson['PARTSTAT'] != null ? Partstat.values.firstWhere((e)=>e.name == Helpers.toCamelCase(attendeeJson['PARTSTAT'])) : null,
+        cutype: attendeeJson['CUTYPE'] != null ? Cutype.values.firstWhere((e) => e.name == Helpers.toCamelCase(attendeeJson['CUTYPE'])) : null,
         delegatedTo: attendeeJson['DELEGATED-TO'],
         delegatedFrom: attendeeJson['DELEGATED-FROM']
       );
@@ -390,25 +390,25 @@ class Attendee{
     var str= '';
 
     if(cn != null){
-      str+='${Heplers.camelToSnake('cn').toUpperCase()}:$cn;';
+      str+='${Helpers.camelToSnake('cn').toUpperCase()}:$cn;';
     }
     if(role != null){
-      str+='${Heplers.camelToSnake('role').toUpperCase()}:${role!.name.toUpperCase()};';
+      str+='${Helpers.camelToSnake('role').toUpperCase()}:${role!.name.toUpperCase()};';
     }
     if(rsvp != null){
-      str+='${Heplers.camelToSnake('rsvp').toUpperCase()}:${rsvp.toString().toUpperCase()};';
+      str+='${Helpers.camelToSnake('rsvp').toUpperCase()}:${rsvp.toString().toUpperCase()};';
     }
     if(partstat != null){
-      str+='${Heplers.camelToSnake('partstat').toUpperCase()}:${partstat!.name.toString().toUpperCase()};';
+      str+='${Helpers.camelToSnake('partstat').toUpperCase()}:${partstat!.name.toString().toUpperCase()};';
     }
     if(cutype != null){
-      str+='${Heplers.camelToSnake('cutype').toUpperCase()}:${cutype!.name.toString().toUpperCase()};';
+      str+='${Helpers.camelToSnake('cutype').toUpperCase()}:${cutype!.name.toString().toUpperCase()};';
     }
     if(delegatedTo != null){
-      str+='${Heplers.camelToSnake('delegatedTo').toUpperCase()}:$delegatedTo;';
+      str+='${Helpers.camelToSnake('delegatedTo').toUpperCase()}:$delegatedTo;';
     }
     if(delegatedFrom != null){
-      str+='${Heplers.camelToSnake('delegatedFrom').toUpperCase()}:$delegatedFrom;';
+      str+='${Helpers.camelToSnake('delegatedFrom').toUpperCase()}:$delegatedFrom;';
     }
     str += mailto.toString();
     return str;

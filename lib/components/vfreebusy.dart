@@ -27,9 +27,9 @@ class VFreeBusy extends ICalendarComponent {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VFREEBUSY\n');
     buffer.write('UID:$uid\n');
-    buffer.write('DTSTAMP:${formatDateTime(dtstamp)}\n');
-    buffer.write('DTSTART:${formatDateTime(dtstart)}\n');
-    buffer.write('DTEND:${formatDateTime(dtend)}\n');
+    buffer.write('DTSTAMP:${Helpers.formatDateTime(dtstamp)}\n');
+    buffer.write('DTSTART:${Helpers.formatDateTime(dtstart)}\n');
+    buffer.write('DTEND:${Helpers.formatDateTime(dtend)}\n');
     if (freeTimes != null) {
       for (var freeTime in freeTimes!) {
         buffer.write('FREEBUSY;FBTYPE=FREE:$freeTime\n');
@@ -50,9 +50,9 @@ class VFreeBusy extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'UID': uid,
-      'DTSTAMP': formatDateTime(dtstamp),
-      'DTSTART': formatDateTime(dtstart),
-      'DTEND': formatDateTime(dtend),
+      'DTSTAMP': Helpers.formatDateTime(dtstamp),
+      'DTSTART': Helpers.formatDateTime(dtstart),
+      'DTEND': Helpers.formatDateTime(dtend),
       'FREETIMES': freeTimes?.map((e)=>e.toString()),
       'BUSYTIMES': busyTimes?.map((e)=>e.toString()),
       'ORGANIZER': organizer.toString(),

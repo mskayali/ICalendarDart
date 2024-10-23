@@ -1,9 +1,11 @@
 // Abstract class for calendar components
-abstract class ICalendarComponent {
-  String formatDateTime(DateTime dateTime) {
-    return '${dateTime.toUtc().toIso8601String().replaceAll('-', '').replaceAll(':', '').split('.').first}Z';
-  }
 
+
+abstract class ICalendarComponent {
   String serialize();
   Map<String, dynamic> toJson();
+  String toString();
+  static List<ICalendarComponent> parse(String data) {
+    throw UnimplementedError();
+  }
 }

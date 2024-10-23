@@ -23,7 +23,7 @@ class VAlarm extends ICalendarComponent {
   String serialize() {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VALARM\n');
-    buffer.write('ACTION:${Heplers.camelToSnake(action.name).toUpperCase()}\n');
+    buffer.write('ACTION:${Helpers.camelToSnake(action.name).toUpperCase()}\n');
     buffer.write('TRIGGER:$trigger\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
     if (duration != null) buffer.write('DURATION:$duration\n');
@@ -36,7 +36,7 @@ class VAlarm extends ICalendarComponent {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'ACTION': Heplers.camelToSnake(action.name).toUpperCase(),
+      'ACTION': Helpers.camelToSnake(action.name).toUpperCase(),
       'TRIGGER': trigger.toString(),
       'DESCRIPTION': description,
       'DURATION': duration,
@@ -63,7 +63,7 @@ class VAlarm extends ICalendarComponent {
 
       switch (key) {
         case 'ACTION':
-          action = VAlarmAction.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == value);
+          action = VAlarmAction.values.firstWhere((e)=> Helpers.camelToSnake(e.name).toUpperCase() == value);
           break;
         case 'TRIGGER':
           trigger = Trriger.parse(value);

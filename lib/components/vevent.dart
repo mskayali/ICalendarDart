@@ -39,17 +39,17 @@ class VEvent extends ICalendarComponent {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VEVENT\n');
     buffer.write('UID:$uid\n');
-    buffer.write('DTSTAMP:${formatDateTime(dtstamp)}\n');
-    buffer.write('DTSTART:${formatDateTime(dtstart)}\n');
-    buffer.write('DTEND:${formatDateTime(dtend)}\n');
+    buffer.write('DTSTAMP:${Helpers.formatDateTime(dtstamp)}\n');
+    buffer.write('DTSTART:${Helpers.formatDateTime(dtstart)}\n');
+    buffer.write('DTEND:${Helpers.formatDateTime(dtend)}\n');
     buffer.write('SUMMARY:$summary\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
     if (location != null) buffer.write('LOCATION:$location\n');
-    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null}\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Helpers.camelToSnake(status!.name).toUpperCase() : null}\n');
     if (rrule != null) buffer.write('RRULE:${rrule!.serialize()}\n');
     if (exDates != null) {
       for (var date in exDates!) {
-        buffer.write('EXDATE:${formatDateTime(date)}\n');
+        buffer.write('EXDATE:${Helpers.formatDateTime(date)}\n');
       }
     }
     if (attendees != null) {
@@ -68,15 +68,15 @@ class VEvent extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'UID': uid,
-      'DTSTAMP': formatDateTime(dtstamp),
-      'DTSTART': formatDateTime(dtstart),
-      'DTEND': formatDateTime(dtend),
+      'DTSTAMP': Helpers.formatDateTime(dtstamp),
+      'DTSTART': Helpers.formatDateTime(dtstart),
+      'DTEND': Helpers.formatDateTime(dtend),
       'SUMMARY': summary,
       'DESCRIPTION': description,
       'LOCATION': location,
-      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null,
+      'STATUS': status?.name != null ? Helpers.camelToSnake(status!.name).toUpperCase() : null,
       'RRULE': rrule?.toJson(),
-      'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
+      'EXDATE': exDates?.map((date) => Helpers.formatDateTime(date)).toList(),
       'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
       'ORGANIZER': organizer?.mailto,
       'CONTACT': contact,
@@ -132,7 +132,7 @@ class VEvent extends ICalendarComponent {
           location = value;
           break;
         case 'STATUS':
-          status = EVENTStatus.values.firstWhere((e) => Heplers.camelToSnake(e.name).toUpperCase() == value);
+          status = EVENTStatus.values.firstWhere((e) => Helpers.camelToSnake(e.name).toUpperCase() == value);
           break;
         case 'RRULE':
           rrule = RecurrenceRule.parse(value);

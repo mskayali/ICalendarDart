@@ -29,7 +29,7 @@ class VParticipant extends ICalendarComponent {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'ROLE': Heplers.camelToSnake(role.name).toUpperCase(),
+      'ROLE': Helpers.camelToSnake(role.name).toUpperCase(),
       'EMAIL': email.mailto,
       'NAME': name,
     };
@@ -43,7 +43,7 @@ class VParticipant extends ICalendarComponent {
 
     if (vparticipantString.contains('mailto')) {
       final parts = vparticipantString.split(':');
-      role = Role.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == parts[0].split(';')[0]);
+      role = Role.values.firstWhere((e)=> Helpers.camelToSnake(e.name).toUpperCase() == parts[0].split(';')[0]);
       email = MailTo.parse(parts[1]) ;
       if (parts[0].contains('CN=')) {
         name = parts[0].split('CN=')[1];

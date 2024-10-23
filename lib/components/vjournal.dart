@@ -27,10 +27,10 @@ class VJournal extends ICalendarComponent {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VJOURNAL\n');
     buffer.write('UID:$uid\n');
-    buffer.write('DTSTAMP:${formatDateTime(dtstamp)}\n');
+    buffer.write('DTSTAMP:${Helpers.formatDateTime(dtstamp)}\n');
     buffer.write('SUMMARY:$summary\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
-    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null}\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Helpers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null}\n');
     if (attendees != null) {
       for (var attendee in attendees!) {
         buffer.write('ATTENDEE:$attendee\n');
@@ -46,10 +46,10 @@ class VJournal extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'UID': uid,
-      'DTSTAMP': formatDateTime(dtstamp),
+      'DTSTAMP': Helpers.formatDateTime(dtstamp),
       'SUMMARY': summary,
       'DESCRIPTION': description,
-      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null ,
+      'STATUS': status?.name != null ? Helpers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null ,
       'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
       'ORGANIZER': organizer.toString(),
       'CONTACT': contact,
@@ -88,7 +88,7 @@ class VJournal extends ICalendarComponent {
           description = value;
           break;
         case 'STATUS':
-          status = JOURNALStatus.values.firstWhere((e)=>Heplers.camelToSnake(e.name.replaceAll('_', '')).toUpperCase() == value);
+          status = JOURNALStatus.values.firstWhere((e)=>Helpers.camelToSnake(e.name.replaceAll('_', '')).toUpperCase() == value);
           break;
         case 'ATTENDEE':
           attendees ??= [];

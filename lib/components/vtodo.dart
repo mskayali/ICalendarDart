@@ -35,16 +35,16 @@ class VTodo extends ICalendarComponent {
     final buffer = StringBuffer();
     buffer.write('BEGIN:VTODO\n');
     buffer.write('UID:$uid\n');
-    buffer.write('DTSTAMP:${formatDateTime(dtstamp)}\n');
+    buffer.write('DTSTAMP:${Helpers.formatDateTime(dtstamp)}\n');
     buffer.write('SUMMARY:$summary\n');
-    buffer.write('DUE:${formatDateTime(due)}\n');
+    buffer.write('DUE:${Helpers.formatDateTime(due)}\n');
     if (description != null) buffer.write('DESCRIPTION:$description\n');
-    if (status != null) buffer.write('STATUS:${status != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null}\n');
+    if (status != null) buffer.write('STATUS:${status != null ? Helpers.camelToSnake(status!.name).toUpperCase() : null}\n');
     if (priority != null) buffer.write('PRIORITY:$priority\n');
     if (rrule != null) buffer.write('RRULE:${rrule!.serialize()}\n');
     if (exDates != null) {
       for (var date in exDates!) {
-        buffer.write('EXDATE:${formatDateTime(date)}\n');
+        buffer.write('EXDATE:${Helpers.formatDateTime(date)}\n');
       }
     }
     if (attendees != null) {
@@ -62,14 +62,14 @@ class VTodo extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'UID': uid,
-      'DTSTAMP': formatDateTime(dtstamp),
+      'DTSTAMP': Helpers.formatDateTime(dtstamp),
       'SUMMARY': summary,
-      'DUE': formatDateTime(due),
+      'DUE': Helpers.formatDateTime(due),
       'DESCRIPTION': description,
-      'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null,
+      'STATUS': status?.name != null ? Helpers.camelToSnake(status!.name).toUpperCase() : null,
       'PRIORITY': priority,
       'RRULE': rrule?.toJson(),
-      'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
+      'EXDATE': exDates?.map((date) => Helpers.formatDateTime(date)).toList(),
       'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
       'ORGANIZER': organizer?.mailto,
       'CONTACT': contact,
@@ -117,7 +117,7 @@ class VTodo extends ICalendarComponent {
           description = value;
           break;
         case 'STATUS':
-          status = TODOStatus.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == value) ;
+          status = TODOStatus.values.firstWhere((e)=> Helpers.camelToSnake(e.name).toUpperCase() == value) ;
           break;
         case 'PRIORITY':
           priority = value;

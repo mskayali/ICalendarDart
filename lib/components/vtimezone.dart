@@ -22,14 +22,14 @@ class VTimezone extends ICalendarComponent {
     buffer.write('TZID:$tzid\n');
     if (standardOffset != null && standardStart != null) {
       buffer.write('BEGIN:STANDARD\n');
-      buffer.write('DTSTART:${formatDateTime(standardStart!)}\n');
-      buffer.write('TZOFFSETFROM:${Heplers.durationToOffsetString(standardOffset!)}\n');
+      buffer.write('DTSTART:${Helpers.formatDateTime(standardStart!)}\n');
+      buffer.write('TZOFFSETFROM:${Helpers.durationToOffsetString(standardOffset!)}\n');
       buffer.write('END:STANDARD\n');
     }
     if (daylightOffset != null && daylightStart != null) {
       buffer.write('BEGIN:DAYLIGHT\n');
-      buffer.write('DTSTART:${formatDateTime(daylightStart!)}\n');
-      buffer.write('TZOFFSETTO:${Heplers.durationToOffsetString(daylightOffset!)}\n');
+      buffer.write('DTSTART:${Helpers.formatDateTime(daylightStart!)}\n');
+      buffer.write('TZOFFSETTO:${Helpers.durationToOffsetString(daylightOffset!)}\n');
       buffer.write('END:DAYLIGHT\n');
     }
     buffer.write('END:VTIMEZONE');
@@ -40,10 +40,10 @@ class VTimezone extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'TZID': tzid,
-      'STANDARD_OFFSET': standardOffset != null ? Heplers.durationToOffsetString(standardOffset!) : null,
-      'DAYLIGHT_OFFSET': daylightOffset != null ? Heplers.durationToOffsetString(daylightOffset!) : null,
-      'STANDARD_START': standardStart != null ? formatDateTime(standardStart!) : null,
-      'DAYLIGHT_START': daylightStart != null ? formatDateTime(daylightStart!) : null,
+      'STANDARD_OFFSET': standardOffset != null ? Helpers.durationToOffsetString(standardOffset!) : null,
+      'DAYLIGHT_OFFSET': daylightOffset != null ? Helpers.durationToOffsetString(daylightOffset!) : null,
+      'STANDARD_START': standardStart != null ? Helpers.formatDateTime(standardStart!) : null,
+      'DAYLIGHT_START': daylightStart != null ? Helpers.formatDateTime(daylightStart!) : null,
     };
   }
 

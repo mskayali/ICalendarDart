@@ -1,4 +1,3 @@
-import 'package:icalendar_plus/components/exdate.dart';
 import 'package:icalendar_plus/components/headers.dart';
 import 'package:icalendar_plus/components/icalendar_component.dart';
 import 'package:icalendar_plus/components/valarm.dart';
@@ -10,7 +9,7 @@ import 'package:icalendar_plus/components/vparticioant.dart';
 import 'package:icalendar_plus/components/vtimezone.dart';
 import 'package:icalendar_plus/components/vtodo.dart';
 // Main ICalendar class
-class ICalendar {
+class ICalendar implements ICalendarComponent {
   CalHeaders headers;
   List<ICalendarComponent> components = [];
 
@@ -71,9 +70,7 @@ class ICalendar {
             components.add(VEvent.parse(componentBuffer.toString()));
           } else if (currentComponent?.toUpperCase() == 'VTODO') {
             components.add(VTodo.parse(componentBuffer.toString()));
-          } else if (currentComponent?.toUpperCase() == 'EXDATE') {
-            components.add(ExDate.parse(componentBuffer.toString()));
-          } else if (currentComponent?.toUpperCase() == 'VALARM') {
+          }else if (currentComponent?.toUpperCase() == 'VALARM') {
             components.add(VAlarm.parse(componentBuffer.toString()));
           } else if (currentComponent?.toUpperCase() == 'VATTACHMENT') {
             components.add(VAttachment.parse(componentBuffer.toString()));
