@@ -53,9 +53,9 @@ class VFreeBusy extends ICalendarComponent {
       'DTSTAMP': formatDateTime(dtstamp),
       'DTSTART': formatDateTime(dtstart),
       'DTEND': formatDateTime(dtend),
-      'FREETIMES': freeTimes,
-      'BUSYTIMES': busyTimes,
-      'ORGANIZER': organizer,
+      'FREETIMES': freeTimes?.map((e)=>e.toString()),
+      'BUSYTIMES': busyTimes?.map((e)=>e.toString()),
+      'ORGANIZER': organizer.toString(),
       'CONTACT': contact,
     };
   }
@@ -76,7 +76,7 @@ class VFreeBusy extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value = parts.getRange(1, parts.length).join(':');
 
       if (key.contains(';')) {
         final keyParts = key.split(';');

@@ -77,8 +77,8 @@ class VEvent extends ICalendarComponent {
       'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name).toUpperCase() : null,
       'RRULE': rrule?.toJson(),
       'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
-      'ATTENDEE': attendees,
-      'ORGANIZER': organizer,
+      'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
+      'ORGANIZER': organizer?.mailto,
       'CONTACT': contact,
       'ATTACH': attachment,
     };

@@ -8,9 +8,11 @@ class ExDate extends ICalendarComponent {
   @override
   String serialize() {
     final buffer = StringBuffer();
+    buffer.write('BEGIN:EXDATE\n');
     for (var date in exDates) {
       buffer.write('EXDATE:${formatDateTime(date)}\n');
     }
+    buffer.write('END:EXDATE');
     return buffer.toString();
   }
 

@@ -50,8 +50,8 @@ class VJournal extends ICalendarComponent {
       'SUMMARY': summary,
       'DESCRIPTION': description,
       'STATUS': status?.name != null ? Heplers.camelToSnake(status!.name.replaceAll('_', '')).toUpperCase() : null ,
-      'ATTENDEE': attendees,
-      'ORGANIZER': organizer,
+      'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
+      'ORGANIZER': organizer.toString(),
       'CONTACT': contact,
     };
   }
@@ -72,7 +72,7 @@ class VJournal extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value = parts.getRange(1, parts.length).join(':');
 
       switch (key) {
         case 'UID':

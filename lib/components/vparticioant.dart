@@ -15,19 +15,22 @@ class VParticipant extends ICalendarComponent {
   @override
   String serialize() {
     final buffer = StringBuffer();
+    buffer.write('BEGIN:VPARTICIPANT\n');
+    
     if (name != null) {
       buffer.write('$role;CN=$name:$email\n');
     } else {
       buffer.write('$role:$email\n');
     }
+    buffer.write('END:VPARTICIPANT');
     return buffer.toString();
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'ROLE': role,
-      'EMAIL': email,
+      'ROLE': Heplers.camelToSnake(role.name).toUpperCase(),
+      'EMAIL': email.mailto,
       'NAME': name,
     };
   }

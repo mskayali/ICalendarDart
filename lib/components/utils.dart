@@ -27,6 +27,89 @@ class DateRangeUtil{
 
 class Heplers{
 
+  static String durationToOffsetString(Duration duration) {
+    int hours = duration.inHours.abs();
+    int minutes = (duration.inMinutes.abs() % 60);
+    String sign = duration.isNegative ? '-' : '+';
+    return '$sign${hours.toString().padLeft(2, '0')}${minutes.toString().padLeft(2, '0')}';
+  }
+
+  static Duration triggerToDuration(String trigger) {
+      // Check if the trigger is negative
+      bool isNegative = trigger.startsWith('-');
+
+      // Remove the negative sign if present
+      String normalizedTrigger = isNegative ? trigger.substring(1) : trigger;
+
+      // Regular expression to match the trigger components
+      RegExp regExp = RegExp(r'P((\d+)D)?(T((\d+)H)?((\d+)M)?((\d+)S)?)?');
+      Match? match = regExp.firstMatch(normalizedTrigger);
+
+      if (match != null) {
+        int days = int.tryParse(match.group(2) ?? '0') ?? 0;
+        int hours = int.tryParse(match.group(5) ?? '0') ?? 0;
+        int minutes = int.tryParse(match.group(7) ?? '0') ?? 0;
+        int seconds = int.tryParse(match.group(9) ?? '0') ?? 0;
+
+        // Create the Duration object
+        Duration duration = Duration(
+          days: days,
+          hours: hours,
+          minutes: minutes,
+          seconds: seconds,
+        );
+
+        // If the trigger was negative, return a negative duration
+        return isNegative ? -duration : duration;
+      } else {
+        throw 'Invalid trigger format: $trigger';
+      }
+    }
+
+    static String durationToTrigger(Duration duration) {
+      // Check if the duration is negative
+      bool isNegative = duration.isNegative;
+
+      // Get the absolute values of the duration components
+      int totalDays = duration.inDays.abs();
+      int totalHours = duration.inHours.abs() % 24;
+      int totalMinutes = duration.inMinutes.abs() % 60;
+      int totalSeconds = duration.inSeconds.abs() % 60;
+
+      // Create the trigger string parts
+      StringBuffer buffer = StringBuffer();
+
+      // Prefix with '-' if the duration is negative
+      if (isNegative) {
+        buffer.write('-');
+      }
+
+      buffer.write('P');
+
+      // Add the day part if greater than zero
+      if (totalDays > 0) {
+        buffer.write('${totalDays}D');
+      }
+
+      // If there are hours, minutes, or seconds, add the time part
+      if (totalHours > 0 || totalMinutes > 0 || totalSeconds > 0) {
+        buffer.write('T');
+
+        if (totalHours > 0) {
+          buffer.write('${totalHours}H');
+        }
+
+        if (totalMinutes > 0) {
+          buffer.write('${totalMinutes}M');
+        }
+
+        if (totalSeconds > 0) {
+          buffer.write('${totalSeconds}S');
+        }
+      }
+
+      return buffer.toString();
+    }
     static String formatDateTime(DateTime dateTime) {
       return '${dateTime.toUtc().toIso8601String().replaceAll('-', '').replaceAll(':', '').split('.').first}Z';
     }
@@ -147,57 +230,56 @@ class ByDay{
     );
   }
 }
-class RelativeTime {
-  final int? preCount;
-  final TimeUnit? type;
-  final int? timediff;
-  final DateTime? datetime;
 
-  RelativeTime({
-    this.preCount,
-    this.type,
-    this.timediff,
-    this.datetime,
-  }) {
-    if (datetime == null && !(type != null && timediff != null)) {
-      throw 'Either "datetime" must be specified, or "type" and "timediff" must be provided.';
+// Abstract class for calendar components
+abstract class Trriger {
+  static Trriger parse(String timeString) {
+    final datetime = DateTime.tryParse(timeString);
+    if (datetime == null) {
+      try {
+        return TrrigerDuration(Heplers.triggerToDuration(timeString));
+      } catch (e) {
+        throw 'Invalid format for RelativeTime string: $timeString';
+      }
+    } else {
+      return TrrigerDate(datetime);
     }
   }
+}
 
+class TrrigerDate extends Trriger{
+  final DateTime datetime;
+
+  TrrigerDate(
+    // this.type,
+    this.datetime,
+  );
   @override
   String toString() {
-    if (datetime != null) {
-      return Heplers.formatDateTime(datetime!);
-    } else {
-      return '${timediff!.isNegative ? '-' : '+'}PT${timediff!.abs()}${type!.name.toUpperCase()}';
+    return Heplers.formatDateTime(datetime);
+  }
+  static TrrigerDate parse(String timeString) {
+    final datetime=DateTime.tryParse(timeString);
+    if(datetime == null){
+      throw 'Invalid format for RelativeTime string: $timeString';
+    }else{
+      return TrrigerDate(datetime);
     }
   }
-
-  // Parse method to handle strings like "-PT15M"
-  static RelativeTime parse(String timeString) {
-    // Regular expression to match the format
-    RegExp regExp = RegExp(r"([+-]?)PT(\d+)([SMHDW])");
-    Match? match = regExp.firstMatch(timeString);
-
-    if (match != null) {
-      // Extract sign, time difference, and type
-      String sign = match.group(1) ?? '';
-      int timeDiff = int.parse(match.group(2)!);
-      String unit = match.group(3)!;
-
-      // Adjust sign for the time difference
-      if (sign == '-') {
-        timeDiff = -timeDiff;
-      }
-
-      // Determine the TimeUnit enum based on the unit character
-      TimeUnit? timeUnit = TimeUnit.values.firstWhere((e)=>unit == e.name.toUpperCase());
-
-      return RelativeTime(
-        timediff: timeDiff,
-        type: timeUnit,
-      );
-    } else {
+}
+class TrrigerDuration extends Trriger{
+  final Duration duration;
+  TrrigerDuration(
+    this.duration,
+  );
+  @override
+  String toString() {
+    return Heplers.durationToTrigger(duration);
+  }
+  static TrrigerDuration parse(String timeString) {
+    try {
+      return TrrigerDuration(Heplers.triggerToDuration(timeString));
+    } catch (e) {
       throw 'Invalid format for RelativeTime string: $timeString';
     }
   }
@@ -265,7 +347,18 @@ class Attendee{
       throw 'Attendee cannot have more than one attribute';
     }
   }
-
+  Map<String,dynamic> toJson() {
+    return{
+      'MAILTO':mailto.mailto,
+      'CN': cn,
+      'ROLE': role?.name != null ? Heplers.camelToSnake(role!.name).toUpperCase() : null,
+      'RSVP': rsvp?.toString(),
+      'PARTSTAT': partstat?.name != null ? Heplers.camelToSnake(partstat!.name).toUpperCase() : null,
+      'CUTYPE': cutype?.name != null ? Heplers.camelToSnake(cutype!.name).toUpperCase() : null,
+      'DELEGATED-TO': delegatedTo,
+      'DELEGATED-FROM': delegatedFrom,
+    };
+  }
   static Attendee parse(String attendeeString) {
     final lines = attendeeString.split(';');
     Map<String,dynamic> attendeeJson={};
@@ -273,7 +366,7 @@ class Attendee{
       final parts = line.split(':');
       if (parts.length == 2) {
         final key = parts[0];
-        final value = parts[1];
+        final value = parts.getRange(1, parts.length).join(':');
         attendeeJson[key]=value;
       }
     }
@@ -356,7 +449,7 @@ class RecurrenceRule {
       'FREQ': frequency.name.toUpperCase(),
       'INTERVAL': interval,
       'UNTIL': until != null ? formatDateTime(until!) : null,
-      'BYDAY': byDay,
+      'BYDAY': byDay.toString(),
     };
   }
 

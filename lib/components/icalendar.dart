@@ -67,23 +67,23 @@ class ICalendar {
         componentBuffer.write('$line\n');
         if (currentComponent == endComponent) {
           // Complete component
-          if (currentComponent == 'VEVENT') {
+          if (currentComponent?.toUpperCase() == 'VEVENT') {
             components.add(VEvent.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VTODO') {
+          } else if (currentComponent?.toUpperCase() == 'VTODO') {
             components.add(VTodo.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'ExDate') {
+          } else if (currentComponent?.toUpperCase() == 'EXDATE') {
             components.add(ExDate.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VAlarm') {
+          } else if (currentComponent?.toUpperCase() == 'VALARM') {
             components.add(VAlarm.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VAttachment') {
+          } else if (currentComponent?.toUpperCase() == 'VATTACHMENT') {
             components.add(VAttachment.parse(componentBuffer.toString()));
-          }else if (currentComponent == 'VFreeBusy') {
+          }else if (currentComponent?.toUpperCase() == 'VFREEBUSY') {
             components.add(VFreeBusy.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VJournal') {
+          } else if (currentComponent?.toUpperCase() == 'VJOURNAL') {
             components.add(VJournal.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VParticipant') {
+          } else if (currentComponent?.toUpperCase() == 'VPARTICIPANT') {
             components.add(VParticipant.parse(componentBuffer.toString()));
-          } else if (currentComponent == 'VTimezone') {
+          } else if (currentComponent?.toUpperCase() == 'VTIMEZONE') {
             components.add(VTimezone.parse(componentBuffer.toString()));
           }
           currentComponent = null;
@@ -97,7 +97,7 @@ class ICalendar {
           final parts = line.split(':');
           if (parts.length == 2) {
             final key = parts[0];
-            final value = parts[1];
+            final value = parts.getRange(1, parts.length).join(':');
             switch (key) {
               case 'PRODID':
                 headers.prodId = value;

@@ -1,7 +1,7 @@
 import 'package:icalendar_plus/components/icalendar_component.dart';
 // VAttachment Class representing an attachment in iCalendar
 class VAttachment extends ICalendarComponent {
-  String? uri; // URI for the attachment
+  Uri? uri; // URI for the attachment
   String? binaryData; // Binary data for the attachment
   String? mimeType; // MIME type of the attachment
 
@@ -29,7 +29,7 @@ class VAttachment extends ICalendarComponent {
   // Parsing VAttachment from .ics formatted string
   static VAttachment parse(String vattachmentString) {
     final lines = vattachmentString.split('\n');
-    String? uri;
+    Uri? uri;
     String? binaryData;
     String? mimeType;
 
@@ -38,7 +38,7 @@ class VAttachment extends ICalendarComponent {
         if (line.contains('FMTTYPE')) {
           final parts = line.split(':');
           mimeType = line.split(';')[1].split('=')[1];
-          uri = parts.length > 1 ? parts[1] : null;
+          uri = parts.length > 1 ? Uri.parse(parts[1])  : null;
         } else if (line.contains('ENCODING')) {
           binaryData = line.split(':')[1];
         }

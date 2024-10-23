@@ -70,8 +70,8 @@ class VTodo extends ICalendarComponent {
       'PRIORITY': priority,
       'RRULE': rrule?.toJson(),
       'EXDATE': exDates?.map((date) => formatDateTime(date)).toList(),
-      'ATTENDEE': attendees,
-      'ORGANIZER': organizer,
+      'ATTENDEE': attendees?.map((e)=>e.toJson()).toList(),
+      'ORGANIZER': organizer?.mailto,
       'CONTACT': contact,
     };
   }
@@ -98,7 +98,7 @@ class VTodo extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value = parts.getRange(1, parts.length).join(':');
 
       switch (key) {
         case 'UID':

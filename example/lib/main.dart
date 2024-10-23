@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:icalendar_plus/icalendar.dart';
 
 void main() {
-  // Create Calendar Headers
+   // Create Calendar Headers
   final headers = CalHeaders(
     prodId: '-//Your Organization//Your Product//EN',
     version: '2.0',
@@ -11,67 +13,51 @@ void main() {
   // Create ICalendar instance
   final calendar = ICalendar.instance(headers);
 
-  // Create a VEvent
   final event = VEvent(
-    uid: 'event123@example.com',
-    dtstamp: DateTime.now(),
-    dtstart: DateTime(2024, 11, 1, 9, 30),
-    dtend: DateTime(2024, 11, 1, 10, 30),
-    summary: 'Team Meeting',
-    description: 'Weekly sync-up meeting with the project team.',
-    location: 'Zoom',
-    status: EVENTStatus.confirmed,
-    attendees: [Attendee(mailto:MailTo('member1@example.com')), Attendee(mailto:MailTo('member2@example.com'), cutype: Cutype.individual)],
-    organizer: MailTo.parse('mailto:manager@example.com'),
-  );
+      uid: 'event123@example.com',
+      dtstamp: DateTime.now(),
+      dtstart: DateTime.now().add(const Duration(days: 2)),
+      dtend: DateTime.now().add(const Duration(days: 2, hours: 1)),
+      summary: 'Team Meeting',
+      description: 'Weekly sync-up meeting with the project team.',
+      location: 'Zoom',
+      attendees: [Attendee(mailto: MailTo('member1@example.com')), Attendee(mailto: MailTo('member2@example.com'))],
+      organizer: MailTo('manager@example.com'));
 
   // Create a VAlarm for the event
-  final alarm = VAlarm(
+  final alarm1 = VAlarm(
     action: VAlarmAction.display,
-    trigger: RelativeTime.parse('-PT15M'), // 15 minutes before the event
+    trigger: TrrigerDuration(
+      -Duration(seconds: 10, minutes: 5, hours: 1, days: 1)
+    ), // or use as Trrig.parse('-PT15M') to create 15 minutes before the event
     description: 'Reminder: Team Meeting in 15 minutes.',
   );
-
-  // Create a VTodo
-  final todo = VTodo(
-    uid: 'todo456@example.com',
-    dtstamp: DateTime.now(),
-    summary: 'Prepare Presentation',
-    due: DateTime(2024, 11, 1, 12, 0),
-    description: 'Create slides for the quarterly review.',
-    status: TODOStatus.needsAction,
-    priority: '1',
+  final alarm2 = VAlarm(
+    action: VAlarmAction.audio,
+    trigger: TrrigerDate(event.dtstart), // on time of the event by exect date
+    description: 'Event begins',
   );
-
-  // Create a VFreeBusy
-  final freeBusy = VFreeBusy(
-    uid: 'freebusy789@example.com',
-    dtstamp: DateTime.now(),
-    dtstart: DateTime(2024, 11, 1, 8, 0),
-    dtend: DateTime(2024, 11, 1, 18, 0),
-    freeTimes: [DateRangeUtil.parse('20241101T080000Z/20241101T090000Z')],
-    busyTimes: [DateRangeUtil.parse('20241101T100000Z/20241101T110000Z')],
+  final alarm3 = VAlarm(
+    action: VAlarmAction.audio,
+    trigger: Trriger.parse('-PT15M'), // on time of the event by exect date
+    description: 'Event begins',
   );
 
   // Add components to the calendar
   calendar.add(event);
-  calendar.add(alarm);
-  calendar.add(todo);
-  calendar.add(freeBusy);
+  calendar.addAll([alarm1, alarm2, alarm3]);
 
   // Serialize the calendar to an iCalendar string
   final icsContent = calendar.serialize();
   print('Generated iCalendar Content:');
   print(icsContent);
 
+  print(jsonEncode(calendar.toJson()));
   // Parse back from the serialized string
   final parsedCalendar = ICalendar.parse(icsContent);
 
-  // Print parsed components to demonstrate parsing
-  print('\nParsed Components:');
-  parsedCalendar.components.forEach((component) {
-    print(component.toJson());
-  });
-
+  // Print parsed Calendar to demonstrate parsing
+  print('\nParsed Calendar:');
+  print(jsonEncode(parsedCalendar.toJson()) );
 
 }

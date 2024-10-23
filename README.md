@@ -40,10 +40,10 @@ import 'package:icalendar/icalendar.dart';
 ### Example: Create and Serialize iCalendar
 
 ```dart
-import 'package:icalendar/icalendar.dart';
+import 'package:icalendar_plus/icalendar.dart';
 
 void main() {
-  // Create Calendar Headers
+   // Create Calendar Headers
   final headers = CalHeaders(
     prodId: '-//Your Organization//Your Product//EN',
     version: '2.0',
@@ -53,30 +53,39 @@ void main() {
   // Create ICalendar instance
   final calendar = ICalendar.instance(headers);
 
-  // Create a VEvent
   final event = VEvent(
-    uid: 'event123@example.com',
-    dtstamp: DateTime.now(),
-    dtstart: DateTime(2024, 11, 1, 9, 30),
-    dtend: DateTime(2024, 11, 1, 10, 30),
-    summary: 'Team Meeting',
-    description: 'Weekly sync-up meeting with the project team.',
-    location: 'Zoom',
-    status: 'CONFIRMED',
-    attendees: ['mailto:member1@example.com', 'mailto:member2@example.com'],
-    organizer: 'mailto:manager@example.com',
-  );
+      uid: 'event123@example.com',
+      dtstamp: DateTime.now(),
+      dtstart: DateTime.now().add(const Duration(days: 2)),
+      dtend: DateTime.now().add(const Duration(days: 2, hours: 1)),
+      summary: 'Team Meeting',
+      description: 'Weekly sync-up meeting with the project team.',
+      location: 'Zoom',
+      attendees: [Attendee(mailto: MailTo('member1@example.com')), Attendee(mailto: MailTo('member2@example.com'))],
+      organizer: MailTo('manager@example.com'));
 
   // Create a VAlarm for the event
-  final alarm = VAlarm(
-    action: 'DISPLAY',
-    trigger: '-PT15M', // 15 minutes before the event
+  final alarm1 = VAlarm(
+    action: VAlarmAction.display,
+    trigger: TrrigerDuration(
+      -Duration(seconds: 10, minutes: 5, hours: 1, days: 1)
+    ), // or use as Trrig.parse('-PT15M') to create 15 minutes before the event
     description: 'Reminder: Team Meeting in 15 minutes.',
+  );
+  final alarm2 = VAlarm(
+    action: VAlarmAction.audio,
+    trigger: TrrigerDate(event.dtstart), // on time of the event by exect date
+    description: 'Event begins',
+  );
+  final alarm3 = VAlarm(
+    action: VAlarmAction.audio,
+    trigger: Trriger.parse('-PT15M'), // on time of the event by exect date
+    description: 'Event begins',
   );
 
   // Add components to the calendar
   calendar.add(event);
-  calendar.add(alarm);
+  calendar.addAll([alarm1, alarm2, alarm3]);
 
   // Serialize the calendar to an iCalendar string
   final icsContent = calendar.serialize();
@@ -91,6 +100,7 @@ void main() {
   parsedCalendar.components.forEach((component) {
     print(component.toJson());
   });
+
 }
 ```
 

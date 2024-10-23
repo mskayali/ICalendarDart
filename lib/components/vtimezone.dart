@@ -1,10 +1,9 @@
-import 'package:icalendar_plus/components/icalendar_component.dart';
-// VTimezone Class representing a timezone component in iCalendar
+import 'package:icalendar_plus/icalendar.dart';
 
 class VTimezone extends ICalendarComponent {
   String tzid; // Timezone ID
-  String? standardOffset; // Standard time offset
-  String? daylightOffset; // Daylight saving time offset
+  Duration? standardOffset; // Standard time offset as Duration
+  Duration? daylightOffset; // Daylight saving time offset as Duration
   DateTime? standardStart; // Start date of standard time
   DateTime? daylightStart; // Start date of daylight saving time
 
@@ -24,13 +23,13 @@ class VTimezone extends ICalendarComponent {
     if (standardOffset != null && standardStart != null) {
       buffer.write('BEGIN:STANDARD\n');
       buffer.write('DTSTART:${formatDateTime(standardStart!)}\n');
-      buffer.write('TZOFFSETFROM:$standardOffset\n');
+      buffer.write('TZOFFSETFROM:${Heplers.durationToOffsetString(standardOffset!)}\n');
       buffer.write('END:STANDARD\n');
     }
     if (daylightOffset != null && daylightStart != null) {
       buffer.write('BEGIN:DAYLIGHT\n');
       buffer.write('DTSTART:${formatDateTime(daylightStart!)}\n');
-      buffer.write('TZOFFSETTO:$daylightOffset\n');
+      buffer.write('TZOFFSETTO:${Heplers.durationToOffsetString(daylightOffset!)}\n');
       buffer.write('END:DAYLIGHT\n');
     }
     buffer.write('END:VTIMEZONE');
@@ -41,19 +40,21 @@ class VTimezone extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'TZID': tzid,
-      'STANDARD_OFFSET': standardOffset,
-      'DAYLIGHT_OFFSET': daylightOffset,
+      'STANDARD_OFFSET': standardOffset != null ? Heplers.durationToOffsetString(standardOffset!) : null,
+      'DAYLIGHT_OFFSET': daylightOffset != null ? Heplers.durationToOffsetString(daylightOffset!) : null,
       'STANDARD_START': standardStart != null ? formatDateTime(standardStart!) : null,
       'DAYLIGHT_START': daylightStart != null ? formatDateTime(daylightStart!) : null,
     };
   }
 
+
+
   // Parsing VTimezone from .ics formatted string
   static VTimezone parse(String vtimezoneString) {
     final lines = vtimezoneString.split('\n');
     String? tzid;
-    String? standardOffset;
-    String? daylightOffset;
+    Duration? standardOffset;
+    Duration? daylightOffset;
     DateTime? standardStart;
     DateTime? daylightStart;
 
@@ -61,17 +62,17 @@ class VTimezone extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value = parts.getRange(1, parts.length).join(':');
 
       switch (key) {
         case 'TZID':
           tzid = value;
           break;
         case 'TZOFFSETFROM':
-          standardOffset = value;
+          standardOffset = parseOffsetToDuration(value);
           break;
         case 'TZOFFSETTO':
-          daylightOffset = value;
+          daylightOffset = parseOffsetToDuration(value);
           break;
         case 'DTSTART':
           if (line.contains("STANDARD")) {
@@ -90,5 +91,16 @@ class VTimezone extends ICalendarComponent {
       standardStart: standardStart,
       daylightStart: daylightStart,
     );
+  }
+
+  // Convert offset string to Duration (e.g., "+0200" -> Duration(hours: 2))
+  static Duration parseOffsetToDuration(String offset) {
+    // Check if it's a negative offset
+    bool isNegative = offset.startsWith('-');
+    int hours = int.parse(offset.substring(1, 3));
+    int minutes = int.parse(offset.substring(3, 5));
+
+    Duration duration = Duration(hours: hours, minutes: minutes);
+    return isNegative ? -duration : duration;
   }
 }

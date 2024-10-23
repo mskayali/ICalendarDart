@@ -4,7 +4,7 @@ import 'package:icalendar_plus/components/utils.dart';
 // VAlarm Class representing an alarm component in iCalendar
 class VAlarm extends ICalendarComponent {
   VAlarmAction action; // e.g., "DISPLAY", "EMAIL"
-  RelativeTime trigger; // Time before or after an event when the alarm should go off
+  Trriger trigger; // Time before or after an event when the alarm should go off
   String? description; // Description of the alarm
   String? duration; // Duration for repeating alarms
   int? repeat; // Number of times the alarm should repeat
@@ -37,7 +37,7 @@ class VAlarm extends ICalendarComponent {
   Map<String, dynamic> toJson() {
     return {
       'ACTION': Heplers.camelToSnake(action.name).toUpperCase(),
-      'TRIGGER': trigger,
+      'TRIGGER': trigger.toString(),
       'DESCRIPTION': description,
       'DURATION': duration,
       'REPEAT': repeat,
@@ -49,7 +49,7 @@ class VAlarm extends ICalendarComponent {
   static VAlarm parse(String valarmString) {
     final lines = valarmString.split('\n');
     VAlarmAction? action;
-    RelativeTime? trigger;
+    Trriger? trigger;
     String? description;
     String? duration;
     int? repeat;
@@ -59,14 +59,14 @@ class VAlarm extends ICalendarComponent {
       final parts = line.split(':');
       if (parts.length < 2) continue;
       final key = parts[0];
-      final value = parts[1];
+      final value =  parts.getRange(1, parts.length).join(':');
 
       switch (key) {
         case 'ACTION':
           action = VAlarmAction.values.firstWhere((e)=> Heplers.camelToSnake(e.name).toUpperCase() == value);
           break;
         case 'TRIGGER':
-          trigger = RelativeTime.parse(value);
+          trigger = Trriger.parse(value);
           break;
         case 'DESCRIPTION':
           description = value;
