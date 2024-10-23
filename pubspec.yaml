@@ -7,3 +7,6 @@ publish_to: https://pub.dev/packages/icalendar_plus
 
 environment:
   sdk: ^3.5.3
+
+dev_dependencies:
+  test: ^1.25.8
