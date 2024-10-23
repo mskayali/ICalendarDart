@@ -99,7 +99,7 @@ class VTodo extends ICalendarComponent {
       if (parts.length < 2) continue;
       final key = parts[0];
       final value = parts.getRange(1, parts.length).join(':');
-
+ 
       switch (key) {
         case 'UID':
           uid = value;

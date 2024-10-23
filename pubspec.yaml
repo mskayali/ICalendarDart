@@ -1,9 +1,8 @@
 name: icalendar_plus
 description: "This Dart plugin provides a comprehensive set of classes to create, manage, serialize, and parse iCalendar components. It supports creating events, to-dos, journals, alarms, free/busy times, timezones, and more. The plugin adheres to the iCalendar (`.ics`) format, making it easy to integrate with calendar applications."
-version: 0.0.5
-homepage: https://github.com/mskayali/ICalendarDart
+version: 0.0.6
+homepage: https://github.com/mskayali
+repository: https://github.com/mskayali/ICalendarDart
 
 environment:
   sdk: ^3.5.3
-dev_dependencies:
-  flutter_lints: ^4.0.0
